@@ -799,13 +799,13 @@ const CONFIG = {
   //    - a Loom embed link:   'https://www.loom.com/embed/abc123...'
   //    - Loom's full embed code (the whole <div><iframe ...></iframe></div> block) between backticks ` `
   //    - a YouTube / Vimeo / Google Drive link, or a file like '/assets/video/vsl.mp4'
-  vsl: '',
+  vsl: '<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/b3dcdbac08284267a5d076088a04e55a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>',
   vslPoster: '',          // optional cover image, e.g. '/assets/img/vsl-cover.jpg' (for Loom the page tries Loom's own thumbnail automatically)
   vslLength: '',          // optional, e.g. '6:30' shows on the cover
 
   // 2) Booking calendar. Your Calendly event link, e.g. 'https://calendly.com/aura/strategy-call'
-  bookingUrl: '',
-  whatsapp: '',           // optional, e.g. '+971501234567' adds "Message us on WhatsApp" under the calendar
+  bookingUrl: 'https://calendly.com/abdoasker155/strategy-call',
+  whatsapp: '+201030190466',           // optional, e.g. '+971501234567' adds "Message us on WhatsApp" under the calendar
   whatsappText: "Hi Aura, I'm a lawyer and I'd like to book a strategy call.",
   onBooked: function(details){
     // runs right after someone books on Calendly, e.g. for ad tracking:
