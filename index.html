@@ -21,6 +21,10 @@
 <!-- faster video: warm up Loom early (the player itself only loads when someone presses play) -->
 <link rel="preconnect" href="https://www.loom.com">
 <link rel="preconnect" href="https://cdn.loom.com">
+<!-- faster booking calendar: open the connection to Calendly while the page loads -->
+<link rel="preconnect" href="https://calendly.com">
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+<link rel="dns-prefetch" href="https://calendly.com">
 <style>
 :root{
   --bg:#03040b; --bg-2:#080a1c; --navy:#233ca4; --blue:#4a62ef; --violet:#7b6cff; --ice:#b9c4ff; --white:#f5f7ff;
@@ -347,30 +351,30 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 @media (max-width:860px){.faq__grid{grid-template-columns:1fr;gap:28px}.faq__side{position:static}.qa button{font-size:16.5px}}
 
 /* ============ BOOKING ============ */
-.book__grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:start}
-.book__copy{display:grid;gap:22px;justify-items:start}
-.book__copy h2{font-size:clamp(32px,4.4vw,54px)}
-.book__copy ul{list-style:none;display:grid;gap:16px}
-.book__copy li{display:flex;gap:14px;align-items:flex-start;color:var(--muted)}
-.book__copy li b{color:#fff;font-weight:600;display:block}
+.book{padding-top:40px}
+.book__head{display:grid;gap:18px;justify-items:start;margin-bottom:44px}
+.book__kicker{display:inline-flex;align-items:center;gap:14px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
+.book__kicker::before{content:"";width:34px;height:1.5px;background:var(--grad)}
+.book__head h2{font-size:clamp(36px,5.6vw,72px);font-weight:900;text-transform:uppercase;letter-spacing:-.035em;line-height:.98;max-width:14ch}
+.book__head p{color:var(--muted);font-size:clamp(16px,1.6vw,18.5px);max-width:56ch}
+.book__chips{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.book__chips li{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--text);padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.book__chips li i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--grad);flex:none}
+.book__chips svg{width:10px;height:10px;color:#fff}
 .tick{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--grad);margin-top:1px;box-shadow:0 0 18px -4px var(--violet)}
 .tick svg{width:13px;height:13px;color:#fff}
-.forwho{font-size:14px;color:var(--faint);padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
-.forwho b{color:var(--text)}
-.cal{padding:10px;min-width:0}
-.cal__frame{position:relative;width:100%;height:760px;border-radius:16px;overflow:hidden;background:rgba(3,4,11,.4)}
-.cal__frame iframe{width:100%;height:100%;border:0;display:block}
-.cal__frame .calendly-inline-widget{width:100%;height:100%;min-width:0}
-.cal__empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:28px;border-radius:16px;border:1.5px dashed rgba(185,196,255,.4);background:repeating-linear-gradient(135deg,rgba(74,98,239,.08) 0 14px,rgba(74,98,239,.02) 14px 28px)}
-.cal__empty>div{display:grid;gap:10px;justify-items:center;max-width:44ch}
-.cal__empty span{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--ice);padding:4px 10px;border-radius:999px}
-.cal__empty b{font-family:var(--display);font-size:20px}
-.cal__empty p{font-size:14px;color:var(--muted)}
-.cal__empty code{font-size:12.5px;color:var(--ice)}
-.cal__alt{text-align:center;font-size:14.5px;color:var(--muted);padding:14px 10px 6px}
+/* clean white booking card, centred, sized to the calendar itself (no empty space under it) */
+.cal{width:100%;max-width:1120px;margin:0 auto;min-width:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(74,98,239,.6),0 20px 50px -25px rgba(0,0,0,.8)}
+.cal__frame{position:relative;width:100%;height:800px;background:#fff;transition:height .3s var(--ease)}
+.cal__frame{overflow:hidden}
+.cal__frame iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0;display:block;background:#fff}
+.cal__load{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;background:#fff;color:#6b7280;font-size:14px;transition:opacity .3s ease}
+.cal__load.gone{opacity:0;pointer-events:none}
+.cal__spin{width:32px;height:32px;border-radius:50%;border:3px solid #e6e9f8;border-top-color:#4a62ef;animation:calspin .8s linear infinite}
+@keyframes calspin{to{transform:rotate(360deg)}}
+.cal__alt{text-align:center;font-size:14.5px;color:var(--muted);margin-top:18px}
 .cal__alt a{color:var(--ice);text-decoration:underline;text-underline-offset:3px}
-@media (max-width:860px){.book__grid{grid-template-columns:1fr}}
-@media (max-width:640px){.cal{padding:6px}.cal__frame{height:900px}}
+@media (max-width:640px){.book__head{margin-bottom:32px}.cal{border-radius:12px}.cal__frame{height:720px}}
 
 /* ============ FINAL + FOOTER ============ */
 .final{padding-block:140px 110px;text-align:center;overflow:hidden;isolation:isolate}
@@ -740,24 +744,24 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 </section>
 
 <!-- ============ 9. BOOKING ============ -->
-<section class="sec" id="book" style="padding-top:30px">
-  <div class="wrap book__grid">
-    <div class="book__copy rv">
-      <span class="label"><i></i>Free strategy call</span>
-      <h2>Let's see what your practice <span class="hl">could be earning</span></h2>
-      <ul>
-        <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>Your content audit</b>Which of your videos already work, and how to repeat them 100 times a month.</span></li>
-        <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>A live demo</b>One of your long videos, already cut into short clips.</span></li>
-        <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>Your 90-day forecast</b>Views, consultations and fees for your field and your city.</span></li>
+<section class="sec book" id="book">
+  <div class="wrap">
+    <div class="book__head rv">
+      <span class="book__kicker">Book a call</span>
+      <h2>Grab a time that <span class="hl">works for you</span></h2>
+      <p>Pick a slot below. Let's see what your practice could be earning.</p>
+      <ul class="book__chips">
+        <li><i><svg><use href="#i-check"/></svg></i>Your content audit</li>
+        <li><i><svg><use href="#i-check"/></svg></i>A live demo on your videos</li>
+        <li><i><svg><use href="#i-check"/></svg></i>Your 90-day forecast</li>
       </ul>
-      <p class="forwho"><b>For licensed lawyers and firms across the Gulf</b> who work with individuals or SMEs, are comfortable on camera and have a team that replies to enquiries the same day.</p>
     </div>
-    <div class="cal card rv d2">
+    <div class="cal">
       <div class="cal__frame" id="calFrame">
-        <div class="cal__empty"><div><span>Booking calendar</span><b>Your Calendly calendar appears here</b><p>Paste your Calendly event link into <code>CONFIG.bookingUrl</code> near the bottom of index.html.</p></div></div>
+        <div class="cal__load" id="calLoad"><span class="cal__spin" aria-hidden="true"></span><p>Loading available times…</p></div>
       </div>
-      <p class="cal__alt" id="calAlt" hidden>Can't find a time? <a id="waLink" target="_blank" rel="noopener">Message us on WhatsApp</a></p>
     </div>
+    <p class="cal__alt" id="calAlt" hidden>Can't find a time? <a id="waLink" target="_blank" rel="noopener">Message us on WhatsApp</a></p>
   </div>
 </section>
 
@@ -920,28 +924,61 @@ $$('#faqList .qa').forEach(q=>q.querySelector('button').onclick=()=>{
   $$('#faqList .qa').forEach(o=>{o.classList.remove('open');o.querySelector('button').setAttribute('aria-expanded','false')});
   if(open){q.classList.add('open');q.querySelector('button').setAttribute('aria-expanded','true')}});
 
-/* ---------- booking calendar (Calendly inline, or any scheduler link in a frame) ---------- */
+/* ---------- booking calendar (Calendly as a light direct iframe: no extra widget script, auto-sized to its content) ---------- */
 (function(){
-  const box=$('#calFrame'),url=(CONFIG.bookingUrl||'').trim();
+  const box=$('#calFrame'),load=$('#calLoad'),url=(CONFIG.bookingUrl||'').trim();
+  const done=()=>load&&load.classList.add('gone');
   if(CONFIG.whatsapp){$('#waLink').href='https://wa.me/'+CONFIG.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(CONFIG.whatsappText||'');$('#calAlt').hidden=false}
-  if(!url)return;
-  const qs=new URLSearchParams(location.search),utm={utmSource:qs.get('utm_source'),utmMedium:qs.get('utm_medium'),utmCampaign:qs.get('utm_campaign'),utmContent:qs.get('utm_content'),utmTerm:qs.get('utm_term')};
-  Object.keys(utm).forEach(k=>{if(!utm[k])delete utm[k]});
-  function mount(){
-    box.innerHTML='';
-    if(/(^|\.)calendly\.com/i.test(new URL(url,location.href).hostname)){
-      const u=new URL(url);
-      const opts={hide_gdpr_banner:'1',hide_event_type_details:'1',background_color:'080a1c',text_color:'f5f7ff',primary_color:'4a62ef'};
-      Object.entries(opts).forEach(([k,v])=>{if(!u.searchParams.has(k))u.searchParams.set(k,v)});
-      const init=()=>window.Calendly&&Calendly.initInlineWidget({url:u.toString(),parentElement:box,utm});
-      if(window.Calendly)return init();
-      const s=document.createElement('script');s.src='https://assets.calendly.com/assets/external/widget.js';s.async=true;s.onload=init;document.head.appendChild(s);
-    }else{const f=document.createElement('iframe');f.src=url;f.title='Book your strategy call';box.appendChild(f)}
+  if(!url){box.closest('.cal').hidden=true;return}
+  const isCal=h=>/(^|\.)calendly\.com$/i.test(h);
+  let mounted=false,calStep=false,calH=0;
+  // On phones Calendly's first screen (the month calendar) reports ~110px more height than it uses,
+  // which shows up as a big empty white block under "Time zone". The iframe keeps its full height,
+  // the card just hides that empty strip. Every other screen (time slots, form) is shown in full.
+  const TRIM=110;
+  function fit(px){
+    const f=box.querySelector('iframe');
+    if(calStep&&!calH)calH=px;
+    const phone=box.offsetWidth<560;
+    const shown=(phone&&px===calH)?px-TRIM:px;
+    if(f)f.style.height=px+'px';
+    box.style.height=shown+'px';
   }
-  if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){o.disconnect();mount()}},{rootMargin:'900px 0px'});o.observe(box)}else mount();
+  function mount(){
+    if(mounted)return;mounted=true;
+    const f=document.createElement('iframe');
+    f.title='Book your strategy call';f.setAttribute('frameborder','0');
+    let src=url;
+    try{
+      const u=new URL(url,location.href);
+      if(isCal(u.hostname)){
+        const qs=new URLSearchParams(location.search);
+        const opts={embed_domain:location.host||'localhost',embed_type:'Inline',hide_gdpr_banner:'1',background_color:'ffffff',text_color:'1a1d2e',primary_color:'4a62ef'};
+        Object.entries(opts).forEach(([k,v])=>{if(!u.searchParams.has(k))u.searchParams.set(k,v)});
+        ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(k=>{const v=qs.get(k);if(v&&!u.searchParams.has(k))u.searchParams.set(k,v)});
+        src=u.toString();
+      }
+    }catch(_){}
+    f.onload=done;
+    f.src=src;box.appendChild(f);
+    setTimeout(done,8000);
+  }
+  // start loading early: when the section gets close, or as soon as the browser is idle after the page loads
+  if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){o.disconnect();mount()}},{rootMargin:'1800px 0px'});o.observe(box)}else mount();
+  const idle=()=>('requestIdleCallback' in window)?requestIdleCallback(mount,{timeout:2500}):setTimeout(mount,1200);
+  if(document.readyState==='complete')idle();else addEventListener('load',idle,{once:true});
   addEventListener('message',e=>{
-    if(!/(^|\.)calendly\.com$/.test((()=>{try{return new URL(e.origin).hostname}catch(_){return''}})()))return;
-    if(e.data&&e.data.event==='calendly.event_scheduled'){try{CONFIG.onBooked&&CONFIG.onBooked(e.data.payload)}catch(_){}}
+    let h='';try{h=new URL(e.origin).hostname}catch(_){}
+    if(!isCal(h)||!e.data)return;
+    const ev=e.data.event;
+    if(ev==='calendly.page_height'&&e.data.payload){
+      const px=parseInt(e.data.payload.height,10);
+      if(px>200&&px<4000)fit(px);
+      done();
+    }
+    if(ev==='calendly.event_type_viewed'){calStep=true;done()}
+    if(ev==='calendly.date_and_time_selected')calStep=false;
+    if(ev==='calendly.event_scheduled'){try{CONFIG.onBooked&&CONFIG.onBooked(e.data.payload)}catch(_){}}
   });
 })();
 
