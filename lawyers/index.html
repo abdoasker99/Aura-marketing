@@ -366,14 +366,15 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 /* clean white booking card, centred, sized to the calendar itself (no empty space under it) */
 .cal{width:100%;max-width:1120px;margin:0 auto;min-width:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(74,98,239,.6),0 20px 50px -25px rgba(0,0,0,.8)}
 .cal__frame{position:relative;width:100%;height:800px;background:#fff;transition:height .3s var(--ease)}
-.cal__frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}
+.cal__frame{overflow:hidden}
+.cal__frame iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0;display:block;background:#fff}
 .cal__load{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;background:#fff;color:#6b7280;font-size:14px;transition:opacity .3s ease}
 .cal__load.gone{opacity:0;pointer-events:none}
 .cal__spin{width:32px;height:32px;border-radius:50%;border:3px solid #e6e9f8;border-top-color:#4a62ef;animation:calspin .8s linear infinite}
 @keyframes calspin{to{transform:rotate(360deg)}}
 .cal__alt{text-align:center;font-size:14.5px;color:var(--muted);margin-top:18px}
 .cal__alt a{color:var(--ice);text-decoration:underline;text-underline-offset:3px}
-@media (max-width:640px){.book__head{margin-bottom:32px}.cal{border-radius:12px}.cal__frame{height:840px}}
+@media (max-width:640px){.book__head{margin-bottom:32px}.cal{border-radius:12px}.cal__frame{height:720px}}
 
 /* ============ FINAL + FOOTER ============ */
 .final{padding-block:140px 110px;text-align:center;overflow:hidden;isolation:isolate}
@@ -755,7 +756,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
         <li><i><svg><use href="#i-check"/></svg></i>Your 90-day forecast</li>
       </ul>
     </div>
-    <div class="cal rv d2">
+    <div class="cal">
       <div class="cal__frame" id="calFrame">
         <div class="cal__load" id="calLoad"><span class="cal__spin" aria-hidden="true"></span><p>Loading available times…</p></div>
       </div>
@@ -930,7 +931,19 @@ $$('#faqList .qa').forEach(q=>q.querySelector('button').onclick=()=>{
   if(CONFIG.whatsapp){$('#waLink').href='https://wa.me/'+CONFIG.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(CONFIG.whatsappText||'');$('#calAlt').hidden=false}
   if(!url){box.closest('.cal').hidden=true;return}
   const isCal=h=>/(^|\.)calendly\.com$/i.test(h);
-  let mounted=false;
+  let mounted=false,calStep=false,calH=0;
+  // On phones Calendly's first screen (the month calendar) reports ~110px more height than it uses,
+  // which shows up as a big empty white block under "Time zone". The iframe keeps its full height,
+  // the card just hides that empty strip. Every other screen (time slots, form) is shown in full.
+  const TRIM=110;
+  function fit(px){
+    const f=box.querySelector('iframe');
+    if(calStep&&!calH)calH=px;
+    const phone=box.offsetWidth<560;
+    const shown=(phone&&px===calH)?px-TRIM:px;
+    if(f)f.style.height=px+'px';
+    box.style.height=shown+'px';
+  }
   function mount(){
     if(mounted)return;mounted=true;
     const f=document.createElement('iframe');
@@ -960,10 +973,11 @@ $$('#faqList .qa').forEach(q=>q.querySelector('button').onclick=()=>{
     const ev=e.data.event;
     if(ev==='calendly.page_height'&&e.data.payload){
       const px=parseInt(e.data.payload.height,10);
-      if(px>200&&px<4000)box.style.height=px+'px';
+      if(px>200&&px<4000)fit(px);
       done();
     }
-    if(ev==='calendly.event_type_viewed')done();
+    if(ev==='calendly.event_type_viewed'){calStep=true;done()}
+    if(ev==='calendly.date_and_time_selected')calStep=false;
     if(ev==='calendly.event_scheduled'){try{CONFIG.onBooked&&CONFIG.onBooked(e.data.payload)}catch(_){}}
   });
 })();
