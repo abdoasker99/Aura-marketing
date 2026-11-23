@@ -351,30 +351,29 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 @media (max-width:860px){.faq__grid{grid-template-columns:1fr;gap:28px}.faq__side{position:static}.qa button{font-size:16.5px}}
 
 /* ============ BOOKING ============ */
-.book__grid{display:grid;gap:48px}
-.book__copy{display:grid;grid-template-columns:1fr 1fr;gap:28px 56px;align-items:end}
-.book__head{display:grid;gap:22px;justify-items:start}
-.book__head h2{font-size:clamp(32px,4.4vw,54px)}
-.book__pts{display:grid;gap:22px}
-.book__copy ul{list-style:none;display:grid;gap:16px}
-.book__copy li{display:flex;gap:14px;align-items:flex-start;color:var(--muted)}
-.book__copy li b{color:#fff;font-weight:600;display:block}
+.book{padding-top:40px}
+.book__head{display:grid;gap:18px;justify-items:start;margin-bottom:44px}
+.book__kicker{display:inline-flex;align-items:center;gap:14px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
+.book__kicker::before{content:"";width:34px;height:1.5px;background:var(--grad)}
+.book__head h2{font-size:clamp(36px,5.6vw,72px);font-weight:900;text-transform:uppercase;letter-spacing:-.035em;line-height:.98;max-width:14ch}
+.book__head p{color:var(--muted);font-size:clamp(16px,1.6vw,18.5px);max-width:56ch}
+.book__chips{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.book__chips li{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--text);padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.book__chips li i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--grad);flex:none}
+.book__chips svg{width:10px;height:10px;color:#fff}
 .tick{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--grad);margin-top:1px;box-shadow:0 0 18px -4px var(--violet)}
 .tick svg{width:13px;height:13px;color:#fff}
-.forwho{font-size:14px;color:var(--faint);padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
-.forwho b{color:var(--text)}
-/* clean white booking card: sized to the calendar itself, no empty space under it */
-.cal{width:100%;max-width:1060px;margin:0 auto;min-width:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(74,98,239,.65),0 18px 40px -24px rgba(0,0,0,.7)}
-.cal__frame{position:relative;width:100%;height:700px;background:#fff;transition:height .35s var(--ease)}
+/* clean white booking card, centred, sized to the calendar itself (no empty space under it) */
+.cal{width:100%;max-width:1120px;margin:0 auto;min-width:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(74,98,239,.6),0 20px 50px -25px rgba(0,0,0,.8)}
+.cal__frame{position:relative;width:100%;height:800px;background:#fff;transition:height .3s var(--ease)}
 .cal__frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}
 .cal__load{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;background:#fff;color:#6b7280;font-size:14px;transition:opacity .3s ease}
 .cal__load.gone{opacity:0;pointer-events:none}
-.cal__spin{width:34px;height:34px;border-radius:50%;border:3px solid #e6e9f8;border-top-color:#4a62ef;animation:calspin .8s linear infinite}
+.cal__spin{width:32px;height:32px;border-radius:50%;border:3px solid #e6e9f8;border-top-color:#4a62ef;animation:calspin .8s linear infinite}
 @keyframes calspin{to{transform:rotate(360deg)}}
-.cal__alt{text-align:center;font-size:14.5px;color:var(--muted);margin-top:-30px}
+.cal__alt{text-align:center;font-size:14.5px;color:var(--muted);margin-top:18px}
 .cal__alt a{color:var(--ice);text-decoration:underline;text-underline-offset:3px}
-@media (max-width:860px){.book__copy{grid-template-columns:1fr;align-items:start}.book__grid{gap:36px}.cal__alt{margin-top:-18px}}
-@media (max-width:640px){.cal{border-radius:14px}.cal__frame{height:1000px}}
+@media (max-width:640px){.book__head{margin-bottom:32px}.cal{border-radius:12px}.cal__frame{height:840px}}
 
 /* ============ FINAL + FOOTER ============ */
 .final{padding-block:140px 110px;text-align:center;overflow:hidden;isolation:isolate}
@@ -744,21 +743,17 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 </section>
 
 <!-- ============ 9. BOOKING ============ -->
-<section class="sec" id="book" style="padding-top:30px">
-  <div class="wrap book__grid">
-    <div class="book__copy rv">
-      <div class="book__head">
-        <span class="label"><i></i>Free strategy call</span>
-        <h2>Let's see what your practice <span class="hl">could be earning</span></h2>
-      </div>
-      <div class="book__pts">
-        <ul>
-          <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>Your content audit</b>Which of your videos already work, and how to repeat them 100 times a month.</span></li>
-          <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>A live demo</b>One of your long videos, already cut into short clips.</span></li>
-          <li><span class="tick"><svg><use href="#i-check"/></svg></span><span><b>Your 90-day forecast</b>Views, consultations and fees for your field and your city.</span></li>
-        </ul>
-        <p class="forwho"><b>For licensed lawyers and firms across the Gulf</b> who work with individuals or SMEs, are comfortable on camera and have a team that replies to enquiries the same day.</p>
-      </div>
+<section class="sec book" id="book">
+  <div class="wrap">
+    <div class="book__head rv">
+      <span class="book__kicker">Book a call</span>
+      <h2>Grab a time that <span class="hl">works for you</span></h2>
+      <p>Pick a slot below. Let's see what your practice could be earning.</p>
+      <ul class="book__chips">
+        <li><i><svg><use href="#i-check"/></svg></i>Your content audit</li>
+        <li><i><svg><use href="#i-check"/></svg></i>A live demo on your videos</li>
+        <li><i><svg><use href="#i-check"/></svg></i>Your 90-day forecast</li>
+      </ul>
     </div>
     <div class="cal rv d2">
       <div class="cal__frame" id="calFrame">
