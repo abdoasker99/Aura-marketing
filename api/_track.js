@@ -2,9 +2,10 @@
 // Opens / clicks are written straight into the person's row of the Outreach Google Sheet (through the sheet's
 // own Apps Script API); the Outreach Suite desktop app reads them from there on its next sync.
 //
-// Environment variables (Vercel → Project → Settings → Environment Variables):
-//   SHEET_URL     the sheet's Apps Script web-app URL (…/exec)
-//   SHEET_TOKEN   the sheet's API token (Settings tab of the sheet, cell "API token")
+// Environment variables (Vercel → Project → Settings → Environment Variables), one pair per ICP sheet:
+//   SHEET_URL / SHEET_TOKEN          sheet #1 (the first sheet connected in the desktop app)
+//   SHEET_URL_2 / SHEET_TOKEN_2 …    sheet #2, #3 … (the number the desktop app shows for the sheet)
+//   SHEET_URL = the sheet's Apps Script web-app URL (…/exec) · SHEET_TOKEN = its API token (sheet's Settings tab)
 // Tracked links are signed with a key derived from SHEET_TOKEN (the desktop app derives the same key), so nobody
 // can abuse the redirect and no second secret has to be copied anywhere.
 const crypto = require("crypto");
@@ -26,13 +27,30 @@ function leadOf(token) {
 }
 
 // must match core/templating.py → sign(): HMAC-SHA256(secret, "token|url"), first 20 hex chars
-function signingKey() {
-  const t = String(process.env.SHEET_TOKEN || "").trim();
+// tokens "<Lead ID>.<sheet #>.<random>" (older ones without the number belong to sheet #1)
+function sheetOf(token) {
+  const parts = String(token || "").split(".");
+  return parts.length >= 3 && /^\d{1,4}$/.test(parts[1]) ? parts[1] : "1";
+}
+
+function sheetEnv(sheet) {
+  const sfx = sheet === "1" ? "" : `_${sheet}`;
+  let url = process.env[`SHEET_URL${sfx}`];
+  let token = process.env[`SHEET_TOKEN${sfx}`];
+  if (sheet === "1") {
+    url = url || process.env.SHEET_URL_1;
+    token = token || process.env.SHEET_TOKEN_1;
+  }
+  return { url, token: String(token || "").trim() };
+}
+
+function signingKey(sheet) {
+  const t = sheetEnv(sheet).token;
   return t ? crypto.createHash("sha256").update(`aura-track|${t}`).digest("hex") : "";
 }
 
 function sign(token, url) {
-  const key = signingKey();
+  const key = signingKey(sheetOf(token));
   if (!key) return "";
   return crypto.createHmac("sha256", key).update(`${token}|${url}`).digest("hex").slice(0, 20);
 }
@@ -59,9 +77,8 @@ function linkLabel(url) {
   return "🔗 Link";
 }
 
-async function toSheet(lead, fields) {
-  const url = process.env.SHEET_URL;
-  const token = process.env.SHEET_TOKEN;
+async function toSheet(lead, fields, sheet = "1") {
+  const { url, token } = sheetEnv(sheet);
   if (!url || !token) return "not-configured";
   try {
     const r = await fetch(url, {
@@ -90,4 +107,4 @@ function later(promise) {
   return false;
 }
 
-module.exports = { HOME, kuwaitNow, leadOf, sign, sameSig, isBot, linkLabel, toSheet, later };
+module.exports = { HOME, kuwaitNow, leadOf, sheetOf, sign, sameSig, isBot, linkLabel, toSheet, later };

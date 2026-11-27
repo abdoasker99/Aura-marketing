@@ -10,7 +10,8 @@ module.exports = async (req, res) => {
   const lead = T.leadOf(token);
   if (valid && lead && !T.isBot(req)) {
     const now = T.kuwaitNow();
-    const job = T.toSheet(lead, { "Link clicked at": now, "Last link clicked": T.linkLabel(url), "Email opened at": now });
+    const job = T.toSheet(lead, { "Link clicked at": now, "Last link clicked": T.linkLabel(url), "Email opened at": now },
+      T.sheetOf(token));
     if (req.query.wait === "1" || !T.later(job)) res.setHeader("X-Track-Result", await job);
   }
   res.setHeader("Cache-Control", "no-store");
